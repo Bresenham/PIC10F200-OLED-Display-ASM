@@ -1,0 +1,219 @@
+MPASM 5.71                    SIMULATION.ASM   2-20-2017  11:10:26         PAGE  1
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+                      00001 #include <p10f200.inc>
+                      00001         LIST
+                      00002 
+                      00003 ;==========================================================================
+                      00004 ; Build date : Nov 17 2016
+                      00005 ;  MPASM PIC10F200 processor include
+                      00006 ; 
+                      00007 ;  (c) Copyright 1999-2016 Microchip Technology, All rights reserved
+                      00008 ;==========================================================================
+                      00009 
+                      00152         LIST
+                      00002     
+                      00003 ; CONFIG
+                      00004 ; __config 0xFFFB
+0FFF   0FFB           00005  __CONFIG _WDTE_OFF & _CP_OFF & _MCLRE_ON
+                      00006  
+  00000010            00007 trisShadow  EQU 10h
+  00000011            00008 tmp1        EQU 11h
+  00000012            00009 tmp2        EQU 12h
+  00000013            00010 tmp3        EQU 13h
+  00000014            00011 tmp4        EQU 14h
+                      00012   
+                      00013   org 0x00
+                      00014   
+0000   0C0B           00015   movlw 0Bh
+0001   0030           00016   movwf trisShadow
+                      00017   
+0002   0CFF           00018   movlw 0FFh
+0003   0026           00019   movwf GPIO
+                      00020   
+0004   09??           00021 main    call    GP2Off
+0005   0C5A           00022         movlw   05Ah
+0006   09??           00023         call    transmitByte
+0007   09??           00024         call    GP2On
+0008   0CFF           00025         movlw   0FFh
+0009   09??           00026         call    delay
+                      00027         
+000A   0A??           00028         goto    main
+                      00029   
+000B   0031           00030 transmitByte:   movwf   tmp1    ;tmp1 contains the byte to be sent
+000C   0C08           00031                 movlw   08h
+000D   0032           00032                 movwf   tmp2
+000E   09??           00033 sr  call    GP0Off
+000F   0371           00034     rlf     tmp1,f              ;shift tmp1 to the left
+0010   0703           00035     btfss   STATUS,C            ;check carry bit
+0011   09??           00036     call    GP1Off
+0012   0603           00037     btfsc   STATUS,C
+0013   09??           00038     call    GP1On
+0014   09??           00039     call    GP0On
+Message[305]: Using default destination of 1 (file).
+0015   02F2           00040     decfsz  tmp2
+0016   0A??           00041     goto    sr
+0017   09??           00042     call    GP0Off
+MPASM 5.71                    SIMULATION.ASM   2-20-2017  11:10:26         PAGE  2
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+0018   0800           00043     retlw   0
+                      00044 
+                      00045 
+0019                  00046 GP2Off:
+0019   0C04           00047     movlw   04h
+001A   0130           00048     iorwf   trisShadow,f
+001B   0210           00049     movfw   trisShadow
+001C   0006           00050     tris    6
+001D   0800           00051     retlw   0
+                      00052 
+001E                  00053 GP2On:
+001E   0C0B           00054     movlw   0bh
+001F   0170           00055     andwf   trisShadow,f
+0020   0210           00056     movfw   trisShadow
+0021   0006           00057     tris    6
+0022   0800           00058     retlw   0
+                      00059     
+0023                  00060 GP1Off:
+0023   0C02           00061     movlw   02h
+0024   0130           00062     iorwf   trisShadow,f
+0025   0210           00063     movfw   trisShadow
+0026   0006           00064     tris    6
+0027   0800           00065     retlw   0
+                      00066 
+0028                  00067 GP1On:
+0028   0C0D           00068     movlw   0dh
+0029   0170           00069     andwf   trisShadow,f
+002A   0210           00070     movfw   trisShadow
+002B   0006           00071     tris    6
+002C   0800           00072     retlw   0
+                      00073     
+002D                  00074 GP0Off:
+002D   0C01           00075     movlw   01h
+002E   0130           00076     iorwf   trisShadow,f
+002F   0210           00077     movfw   trisShadow
+0030   0006           00078     tris    6
+0031   0800           00079     retlw   0
+                      00080     
+0032                  00081 GP0On:
+0032   0C0E           00082     movlw   0eh
+0033   0170           00083     andwf   trisShadow,f
+0034   0210           00084     movfw   trisShadow
+0035   0006           00085     tris    6
+0036   0800           00086     retlw   0
+                      00087         
+0037   0031           00088 delay:  movwf   tmp1
+0038   0CFF           00089 decr    movlw   0FFh
+0039   0032           00090         movwf   tmp2
+Message[305]: Using default destination of 1 (file).
+003A   02F1           00091         decfsz  tmp1
+003B   0A??           00092         goto    decr2
+003C   0800           00093         retlw   0
+Message[305]: Using default destination of 1 (file).
+MPASM 5.71                    SIMULATION.ASM   2-20-2017  11:10:26         PAGE  3
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+003D   02F2           00094 decr2   decfsz  tmp2
+003E   0A??           00095         goto    decr2
+003F   0A??           00096         goto    decr
+                      00097         
+0FFB                  00098     END
+MPASM 5.71                    SIMULATION.ASM   2-20-2017  11:10:26         PAGE  4
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+C                                 00000000
+CAL0                              00000001
+CAL1                              00000002
+CAL2                              00000003
+CAL3                              00000004
+CAL4                              00000005
+CAL5                              00000006
+CAL6                              00000007
+DC                                00000001
+F                                 00000001
+FOSC4                             00000000
+FSR                               00000004
+GP0                               00000000
+GP0Off                            0000002D
+GP0On                             00000032
+GP1                               00000001
+GP1Off                            00000023
+GP1On                             00000028
+GP2                               00000002
+GP2Off                            00000019
+GP2On                             0000001E
+GP3                               00000003
+GPIO                              00000006
+GPWUF                             00000007
+INDF                              00000000
+NOT_GPPU                          00000006
+NOT_GPWU                          00000007
+NOT_PD                            00000003
+NOT_TO                            00000004
+OSCCAL                            00000005
+PCL                               00000002
+PS0                               00000000
+PS1                               00000001
+PS2                               00000002
+PSA                               00000003
+STATUS                            00000003
+T0CS                              00000005
+T0SE                              00000004
+TMR0                              00000001
+TRISIO0                           00000000
+TRISIO1                           00000001
+TRISIO2                           00000002
+TRISIO3                           00000003
+W                                 00000000
+Z                                 00000002
+_CONFIG                           00000FFF
+_CP_OFF                           00000FFF
+_CP_ON                            00000FF7
+_IDLOC0                           00000100
+_IDLOC1                           00000101
+_IDLOC2                           00000102
+_IDLOC3                           00000103
+_IntRC_OSC                        00000FFF
+MPASM 5.71                    SIMULATION.ASM   2-20-2017  11:10:26         PAGE  5
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+_MCLRE_OFF                        00000FEF
+_MCLRE_ON                         00000FFF
+_OSC_IntRC                        00000FFF
+_WDTE_OFF                         00000FFB
+_WDTE_ON                          00000FFF
+_WDT_OFF                          00000FFB
+_WDT_ON                           00000FFF
+__10F200                          00000001
+decr                              00000038
+decr2                             0000003D
+delay                             00000037
+main                              00000004
+sr                                0000000E
+tmp1                              00000011
+tmp2                              00000012
+tmp3                              00000013
+tmp4                              00000014
+transmitByte                      0000000B
+trisShadow                        00000010
+
+Errors   :     0
+Warnings :     0 reported,     0 suppressed
+Messages :     3 reported,     0 suppressed
+
+

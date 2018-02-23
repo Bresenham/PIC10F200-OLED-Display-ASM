@@ -1,0 +1,56 @@
+MPLINK 5.08, LINKER
+Linker Map File - Created Mon Feb 20 11:10:26 2017
+
+                                 Section Info
+                  Section       Type    Address   Location Size(Bytes)
+                ---------  ---------  ---------  ---------  ---------
+                   .org_0       code   0x000000    program   0x000080
+                   .cinit    romdata   0x000040    program   0x000004
+.config_0FFF_BUILD/DEFAULT/PRODUCTION/SIMULAT       code   0x000fff    program   0x000002
+
+
+
+                              Program Memory Usage 
+                               Start         End      
+                           ---------   ---------      
+                            0x000000    0x000041      
+                            0x000fff    0x000fff      
+            67 out of 261 program addresses used, program memory utilization is 25%
+
+
+
+                              Symbols - Sorted by Name
+                     Name    Address   Location    Storage File                     
+                ---------  ---------  ---------  --------- ---------                
+                   GP0Off   0x00002d    program     static D:\Dokumente\MPLabX_Projects\AssemblerSimulationProject.X\simulation.asm
+                    GP0On   0x000032    program     static D:\Dokumente\MPLabX_Projects\AssemblerSimulationProject.X\simulation.asm
+                   GP1Off   0x000023    program     static D:\Dokumente\MPLabX_Projects\AssemblerSimulationProject.X\simulation.asm
+                    GP1On   0x000028    program     static D:\Dokumente\MPLabX_Projects\AssemblerSimulationProject.X\simulation.asm
+                   GP2Off   0x000019    program     static D:\Dokumente\MPLabX_Projects\AssemblerSimulationProject.X\simulation.asm
+                    GP2On   0x00001e    program     static D:\Dokumente\MPLabX_Projects\AssemblerSimulationProject.X\simulation.asm
+                     decr   0x000038    program     static D:\Dokumente\MPLabX_Projects\AssemblerSimulationProject.X\simulation.asm
+                    decr2   0x00003d    program     static D:\Dokumente\MPLabX_Projects\AssemblerSimulationProject.X\simulation.asm
+                    delay   0x000037    program     static D:\Dokumente\MPLabX_Projects\AssemblerSimulationProject.X\simulation.asm
+                     main   0x000004    program     static D:\Dokumente\MPLabX_Projects\AssemblerSimulationProject.X\simulation.asm
+                       sr   0x00000e    program     static D:\Dokumente\MPLabX_Projects\AssemblerSimulationProject.X\simulation.asm
+             transmitByte   0x00000b    program     static D:\Dokumente\MPLabX_Projects\AssemblerSimulationProject.X\simulation.asm
+
+
+
+                              Symbols - Sorted by Address
+                     Name    Address   Location    Storage File                     
+                ---------  ---------  ---------  --------- ---------                
+                     main   0x000004    program     static D:\Dokumente\MPLabX_Projects\AssemblerSimulationProject.X\simulation.asm
+             transmitByte   0x00000b    program     static D:\Dokumente\MPLabX_Projects\AssemblerSimulationProject.X\simulation.asm
+                       sr   0x00000e    program     static D:\Dokumente\MPLabX_Projects\AssemblerSimulationProject.X\simulation.asm
+                   GP2Off   0x000019    program     static D:\Dokumente\MPLabX_Projects\AssemblerSimulationProject.X\simulation.asm
+                    GP2On   0x00001e    program     static D:\Dokumente\MPLabX_Projects\AssemblerSimulationProject.X\simulation.asm
+                   GP1Off   0x000023    program     static D:\Dokumente\MPLabX_Projects\AssemblerSimulationProject.X\simulation.asm
+                    GP1On   0x000028    program     static D:\Dokumente\MPLabX_Projects\AssemblerSimulationProject.X\simulation.asm
+                   GP0Off   0x00002d    program     static D:\Dokumente\MPLabX_Projects\AssemblerSimulationProject.X\simulation.asm
+                    GP0On   0x000032    program     static D:\Dokumente\MPLabX_Projects\AssemblerSimulationProject.X\simulation.asm
+                    delay   0x000037    program     static D:\Dokumente\MPLabX_Projects\AssemblerSimulationProject.X\simulation.asm
+                     decr   0x000038    program     static D:\Dokumente\MPLabX_Projects\AssemblerSimulationProject.X\simulation.asm
+                    decr2   0x00003d    program     static D:\Dokumente\MPLabX_Projects\AssemblerSimulationProject.X\simulation.asm
+
+

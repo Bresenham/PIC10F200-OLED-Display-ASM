@@ -1,0 +1,294 @@
+MPASM 5.71                    SIMULATION.ASM   2-23-2017  14:12:45         PAGE  1
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+                      00001 #include <p10f200.inc>
+                      00001         LIST
+                      00002 
+                      00003 ;==========================================================================
+                      00004 ; Build date : Nov 17 2016
+                      00005 ;  MPASM PIC10F200 processor include
+                      00006 ; 
+                      00007 ;  (c) Copyright 1999-2016 Microchip Technology, All rights reserved
+                      00008 ;==========================================================================
+                      00009 
+                      00152         LIST
+                      00002     
+0FFF   0FFB           00003     __CONFIG _WDTE_OFF & _CP_OFF & _MCLRE_ON
+                      00004     
+  00000010            00005 tmp1        EQU 10h
+  00000011            00006 tmp2        EQU 11h
+  00000012            00007 tmp3        EQU 12h
+  00000013            00008 trisShadow  EQU 13h
+                      00009         
+                      00010     org 0x00
+                      00011     
+0000   0C0F           00012     movlw   0Fh         ;set all pins as input
+0001   0033           00013     movwf   trisShadow
+                      00014     
+0002   0C00           00015     movlw   000h        ;set all pins to 'Low'-state
+0003   0026           00016     movwf   GPIO
+                      00017 
+0004   0C1B           00018 main    movlw   01Bh
+0005   0032           00019         movwf   tmp3
+0006   09??           00020 cmd     call    I2CStart    ;SSD1306 I2C Adress
+0007   0C78           00021         movlw   078h
+0008   09??           00022         call    TransmitByte
+                      00023         
+                      00024         ;Slave Ack Clock
+0009   09??           00025         call    GP1Off
+000A   09??           00026         call    GP0On
+000B   0C01           00027         movlw   001h
+000C   09??           00028         call    delay
+000D   09??           00029         call    GP0Off
+                      00030         
+000E   0C00           00031         movlw   000h        ;00h for command byte
+000F   09??           00032         call    TransmitByte
+                      00033         
+                      00034         ;Slave Ack Clock
+0010   09??           00035         call    GP1Off
+0011   09??           00036         call    GP0On
+0012   0C01           00037         movlw   001h
+0013   09??           00038         call    delay
+0014   09??           00039         call    GP0Off
+                      00040         
+0015   0212           00041         movfw   tmp3
+0016   09??           00042         call    InitData
+0017   09??           00043         call    TransmitByte
+MPASM 5.71                    SIMULATION.ASM   2-23-2017  14:12:45         PAGE  2
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+                      00044         
+                      00045         ;Slave Ack Clock
+0018   09??           00046         call    GP1Off
+0019   09??           00047         call    GP0On
+001A   0C01           00048         movlw   001h
+001B   09??           00049         call    delay
+001C   09??           00050         call    GP0Off
+                      00051         
+001D   09??           00052         call    I2CStop
+                      00053         
+001E   0C07           00054         movlw   007h
+001F   09??           00055         call    delay       ;short delay between init bytes
+                      00056         
+0020   00F2           00057         decf    tmp3,f
+0021   07F2           00058         btfss   tmp3,7      ;check if last bit is set (underflow)
+0022   0A??           00059         goto    cmd
+0023   0A??           00060         goto    main
+                      00061 
+                      00062 ;GP1 is Data
+0024                  00063 GP1On:
+0024   0C02           00064     movlw   02h
+0025   0133           00065     iorwf   trisShadow,f
+0026   0213           00066     movfw   trisShadow
+0027   0006           00067     tris    6
+0028   0800           00068     retlw   0
+                      00069 
+0029                  00070 GP1Off:
+0029   0C0D           00071     movlw   0Dh
+002A   0173           00072     andwf   trisShadow,f
+002B   0213           00073     movfw   trisShadow
+002C   0006           00074     tris    6
+002D   0800           00075     retlw   0
+                      00076     
+                      00077 ;GP0 is Clock
+002E                  00078 GP0On:
+002E   0C01           00079     movlw   01h
+002F   0133           00080     iorwf   trisShadow,f
+0030   0213           00081     movfw   trisShadow
+0031   0006           00082     tris    6
+0032   0800           00083     retlw   0
+                      00084     
+0033                  00085 GP0Off:
+0033   0C0E           00086     movlw   0Eh
+0034   0173           00087     andwf   trisShadow,f
+0035   0213           00088     movfw   trisShadow
+0036   0006           00089     tris    6
+0037   0800           00090     retlw   0
+                      00091     
+0038                  00092 I2CStart:
+0038   09??           00093     call    GP1Off
+0039   0C01           00094     movlw   001h
+003A   09??           00095     call    delay
+003B   09??           00096     call    GP0Off
+MPASM 5.71                    SIMULATION.ASM   2-23-2017  14:12:45         PAGE  3
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+003C   0800           00097     retlw   0
+                      00098     
+003D                  00099 I2CStop:
+003D   09??           00100     call    GP0On
+003E   0C01           00101     movlw   001h
+003F   09??           00102     call    delay
+0040   09??           00103     call    GP1On
+0041   0800           00104     retlw   0
+                      00105     
+0042   0030           00106 delay:  movwf   tmp1
+0043   0CFF           00107 decr    movlw   0FFh
+0044   0031           00108         movwf   tmp2
+Message[305]: Using default destination of 1 (file).
+0045   02F0           00109         decfsz  tmp1
+0046   0A??           00110         goto    decr2
+0047   0800           00111         retlw   0
+Message[305]: Using default destination of 1 (file).
+0048   02F1           00112 decr2   decfsz  tmp2
+0049   0A??           00113         goto    decr2
+004A   0A??           00114         goto    decr
+                      00115             
+004B   0030           00116 TransmitByte:   movwf   tmp1    ;tmp1 contains the byte to be sent
+004C   0C08           00117                 movlw   08h
+004D   0031           00118                 movwf   tmp2
+004E   09??           00119 sr  call    GP0Off
+004F   0370           00120     rlf     tmp1,f              ;shift tmp1 to the left
+0050   0703           00121     btfss   STATUS,C            ;check carry bit
+0051   09??           00122     call    GP1Off              ;if carry is 0, set GP1 to low
+0052   0603           00123     btfsc   STATUS,C
+0053   09??           00124     call    GP1On
+0054   09??           00125     call    GP0On               ;generate clock rising edge
+Message[305]: Using default destination of 1 (file).
+0055   02F1           00126     decfsz  tmp2                ;decrement tmp2 from 8 to 0
+0056   0A??           00127     goto    sr
+0057   09??           00128     call    GP0Off
+0058   0800           00129     retlw   0
+                      00130     
+                      00131 ;init Sequence of SSD1306 consists of register bytes and data bytes
+                      00132 ;register byte is sent first then related data byte
+0059                  00133 InitData:
+0059   01E2           00134     addwf   PCL,F   ;add w-register to program counter
+005A   08AF           00135     retlw   0AFh
+005B   0814           00136     retlw   014h
+005C   088D           00137     retlw   08Dh
+005D   0820           00138     retlw   020h
+005E   08DB           00139     retlw   0DBh
+005F   0812           00140     retlw   012h
+0060   08DA           00141     retlw   0DAh
+0061   0822           00142     retlw   022h
+0062   08D9           00143     retlw   0D9h
+0063   08F0           00144     retlw   0F0h
+0064   08D5           00145     retlw   0D5h
+0065   0800           00146     retlw   000h
+MPASM 5.71                    SIMULATION.ASM   2-23-2017  14:12:45         PAGE  4
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+0066   08D3           00147     retlw   0D3h
+0067   08A4           00148     retlw   0A4h
+0068   083F           00149     retlw   03Fh
+0069   08A8           00150     retlw   0A8h
+006A   08A6           00151     retlw   0A6h
+006B   08A1           00152     retlw   0A1h
+006C   083F           00153     retlw   03Fh
+006D   0881           00154     retlw   081h
+006E   0840           00155     retlw   040h
+006F   0810           00156     retlw   010h
+0070   0800           00157     retlw   000h
+0071   08C8           00158     retlw   0C8h
+0072   08B0           00159     retlw   0B0h
+0073   0800           00160     retlw   000h
+0074   0820           00161     retlw   020h
+0075   08AE           00162     retlw   0AEh
+                      00163     
+0FFB                  00164     END
+MPASM 5.71                    SIMULATION.ASM   2-23-2017  14:12:45         PAGE  5
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+C                                 00000000
+CAL0                              00000001
+CAL1                              00000002
+CAL2                              00000003
+CAL3                              00000004
+CAL4                              00000005
+CAL5                              00000006
+CAL6                              00000007
+DC                                00000001
+F                                 00000001
+FOSC4                             00000000
+FSR                               00000004
+GP0                               00000000
+GP0Off                            00000033
+GP0On                             0000002E
+GP1                               00000001
+GP1Off                            00000029
+GP1On                             00000024
+GP2                               00000002
+GP3                               00000003
+GPIO                              00000006
+GPWUF                             00000007
+I2CStart                          00000038
+I2CStop                           0000003D
+INDF                              00000000
+InitData                          00000059
+NOT_GPPU                          00000006
+NOT_GPWU                          00000007
+NOT_PD                            00000003
+NOT_TO                            00000004
+OSCCAL                            00000005
+PCL                               00000002
+PS0                               00000000
+PS1                               00000001
+PS2                               00000002
+PSA                               00000003
+STATUS                            00000003
+T0CS                              00000005
+T0SE                              00000004
+TMR0                              00000001
+TRISIO0                           00000000
+TRISIO1                           00000001
+TRISIO2                           00000002
+TRISIO3                           00000003
+TransmitByte                      0000004B
+W                                 00000000
+Z                                 00000002
+_CONFIG                           00000FFF
+_CP_OFF                           00000FFF
+_CP_ON                            00000FF7
+_IDLOC0                           00000100
+_IDLOC1                           00000101
+_IDLOC2                           00000102
+MPASM 5.71                    SIMULATION.ASM   2-23-2017  14:12:45         PAGE  6
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+_IDLOC3                           00000103
+_IntRC_OSC                        00000FFF
+_MCLRE_OFF                        00000FEF
+_MCLRE_ON                         00000FFF
+_OSC_IntRC                        00000FFF
+_WDTE_OFF                         00000FFB
+_WDTE_ON                          00000FFF
+_WDT_OFF                          00000FFB
+_WDT_ON                           00000FFF
+__10F200                          00000001
+__DEBUG                           
+__MPLAB_DEBUGGER_SIMULATOR        1
+cmd                               00000006
+decr                              00000043
+decr2                             00000048
+delay                             00000042
+main                              00000004
+sr                                0000004E
+tmp1                              00000010
+tmp2                              00000011
+tmp3                              00000012
+trisShadow                        00000013
+
+Errors   :     0
+Warnings :     0 reported,     0 suppressed
+Messages :     3 reported,     0 suppressed
+
+
